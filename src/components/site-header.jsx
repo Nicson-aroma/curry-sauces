@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 
 import { Badge } from "./ui/badge";
 import { useCart } from "./cart-provider";
@@ -10,6 +11,7 @@ import { brand, navLinks } from "../lib/meahs-data";
 
 export default function SiteHeader() {
   const { itemCount } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="site-header">
@@ -34,6 +36,16 @@ export default function SiteHeader() {
         </div>
 
         <div className="site-meta">
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            aria-expanded={isMenuOpen}
+            aria-controls="site-navigation"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setIsMenuOpen((current) => !current)}
+          >
+            {isMenuOpen ? <X className="h-5 w-5" strokeWidth={1.9} /> : <Menu className="h-5 w-5" strokeWidth={1.9} />}
+          </button>
           <Link
             href="/cart"
             className="cart-nav-link"
@@ -47,11 +59,23 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      <nav className="site-nav" aria-label="Main navigation">
+      <nav
+        id="site-navigation"
+        className={`site-nav ${isMenuOpen ? "site-nav-open" : ""}`}
+        aria-label="Main navigation"
+      >
+        <div className="mobile-nav-title">
+          <p className="mobile-nav-title-eyebrow">The sauces with restaurant heritage</p>
+          <p className="mobile-nav-title-text">{brand.name}</p>
+        </div>
         <ul className="site-nav-list">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className="site-nav-link">
+              <Link
+                href={link.href}
+                className="site-nav-link"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <Badge variant="outline" className="nav-pill">
                   {link.label}
                 </Badge>

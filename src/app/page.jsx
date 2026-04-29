@@ -12,9 +12,25 @@ export default function Home() {
     <main className="page-shell">
       <HomeOfferBar />
 
-      <Card className="page-panel">
+      <Card className="page-panel desktop-carousel-panel">
         <CardContent className="p-4 md:p-5">
-          <AssetCarousel imageUrls={homeContent.sliderImages} altPrefix="Meahs home slide" />
+          <AssetCarousel
+            imageUrls={homeContent.sliderImages}
+            altPrefix="Meahs home slide"
+            aspectRatioClassName="aspect-[16/9]"
+            imageSizes="(min-width: 768px) 66vw, 100vw"
+          />
+        </CardContent>
+      </Card>
+
+      <Card className="page-panel mobile-hero-panel">
+        <CardContent className="p-4">
+          <AssetCarousel
+            imageUrls={homeContent.sliderImages}
+            altPrefix="Meahs mobile slide"
+            aspectRatioClassName="aspect-[3/4]"
+            imageSizes="100vw"
+          />
         </CardContent>
       </Card>
 

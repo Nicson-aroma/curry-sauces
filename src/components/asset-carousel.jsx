@@ -7,7 +7,12 @@ import { Button } from "./ui/button";
 
 const AUTO_MS = 5000;
 
-export default function AssetCarousel({ imageUrls, altPrefix }) {
+export default function AssetCarousel({
+  imageUrls,
+  altPrefix,
+  aspectRatioClassName = "aspect-[16/9]",
+  imageSizes = "(max-width: 768px) 100vw, 66vw",
+}) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -35,12 +40,12 @@ export default function AssetCarousel({ imageUrls, altPrefix }) {
         >
           {imageUrls.map((imageUrl, imageIndex) => (
             <div key={imageUrl} className="min-w-full">
-              <div className="relative aspect-[16/9] w-full">
+              <div className={`relative w-full ${aspectRatioClassName}`}>
                 <Image
                   src={imageUrl}
                   alt={`${altPrefix ?? "Image"} ${imageIndex + 1}`}
                   fill
-                  sizes="(max-width: 768px) 100vw, 66vw"
+                  sizes={imageSizes}
                   priority={imageIndex === 0}
                   className="object-cover"
                 />
