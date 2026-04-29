@@ -1,0 +1,241 @@
+{
+  "brand": {
+    "name": "Meah's Curry Sauces",
+    "companyName": "Meah's Flavours of India Ltd",
+    "phone": "01582 493388",
+    "email": "info@curry-sauces.co.uk",
+    "address": "Unit H10, Park Avenue, Sundon Park Road, Luton, Bedfordshire, LU3 3BP"
+  },
+  "navLinks": [
+    { "href": "/", "label": "Home" },
+    { "href": "/shop", "label": "Shop" },
+    { "href": "/heritage", "label": "Our Heritage" },
+    { "href": "/events", "label": "Events & Shows" },
+    { "href": "/news", "label": "News" },
+    { "href": "/contact", "label": "Contact Us" }
+  ],
+  "socialLinks": [
+    {
+      "name": "Facebook",
+      "iconUrl": "https://www.curry-sauces.co.uk/images/facebook.png"
+    },
+    {
+      "name": "Twitter",
+      "iconUrl": "https://www.curry-sauces.co.uk/images/twitter.png"
+    },
+    {
+      "name": "Instagram",
+      "iconUrl": "https://www.curry-sauces.co.uk/images/instagram.png"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Bedfordshire Food and Drink Award, Overall Winner",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/awards/logo_BEDS-2017_winner.png"
+    },
+    {
+      "title": "Great Taste Award 2018",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/awards/GT_18_1-star.png"
+    }
+  ],
+  "home": {
+    "sliderImages": [
+      "https://www.curry-sauces.co.uk/images/slides/1.jpg",
+      "https://www.curry-sauces.co.uk/images/slides/2.jpg",
+      "https://www.curry-sauces.co.uk/images/slides/3.jpg",
+      "https://www.curry-sauces.co.uk/images/slides/4.jpg"
+    ],
+    "featureImage": "https://www.curry-sauces.co.uk/images/mc.jpg",
+    "title": "Welcome to Meah's Sauces",
+    "subtitle": "Stock up on Meah's Curry Sauces for your left over turkey.",
+    "introParagraphs": [
+      "Really fancy a curry but either can't afford to go out to a restaurant or you don't have the time and ingredients to cook one? With Meah's authentic curry sauces you can now have those restaurant flavours all in the comfort of your own home.",
+      "Our chefs combine a blend of traditional spices and locally grown fresh produce, all you need to do is cook your meat or vegetables and add sauce - giving you exactly what you desired without leaving the house or making a dent in your pocket."
+    ],
+    "availability": "Available for sale now to the public or the wholesale."
+  },
+  "heritage": {
+    "title": "Our heritage",
+    "images": [
+      "https://www.curry-sauces.co.uk/images/heritage.jpg",
+      "https://www.curry-sauces.co.uk/images/heritageside.jpg"
+    ],
+    "paragraphs": [
+      "Meah's Curry Sauces are the result of over 47 years of restaurant experience where we built up a reputation for producing delicately flavoured authentic Indian dishes and friendly service.",
+      "Following continuous requests from customers to make the restaurant's unique flavours available for home cooking, the company started offering its range of restaurant-style sauces directly for sale to allow you to make your own quality Indian dishes at home. Each of our hand-made classic sauces takes six hours to produce and contains locally grown fresh produce and traditional spices.",
+      "For the best results, use our easy-to-follow instructions on the top of the pot and re-create those same fresh unique tastes that our customers have been experiencing for the last 47 years."
+    ],
+    "closing": "Enjoy your meal.",
+    "notice": "Please Note: Since the sale of Meah Tandoori restaurant in 2003, Meah's Flavours of India Ltd (Meah's Curry Sauces) has had no association with this business."
+  },
+  "events": {
+    "title": "Events and Shows",
+    "description": "Meah's says the team attends local farmers markets and food festivals across the UK, giving customers a chance to sample sauces and pick up recipe ideas in person.",
+    "heroImage": "https://www.curry-sauces.co.uk/images/stall.jpg",
+    "galleryImages": [
+      "https://www.curry-sauces.co.uk/images/gallery/1.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/2.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/3.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/4.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/5.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/6.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/7.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/8.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/9.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/10.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/11.jpg",
+      "https://www.curry-sauces.co.uk/images/gallery/12.jpg"
+    ]
+  },
+  "news": {
+    "title": "News",
+    "description": "Updates and announcements from Meah's Curry Sauces, including community activity and local partnerships.",
+    "heroImage": "https://www.curry-sauces.co.uk/images/news.jpg",
+    "items": [
+      {
+        "title": "Supporting local football",
+        "imageUrl": "https://www.curry-sauces.co.uk/images/news/football-team-2.jpg",
+        "summary": "A look at Meah's involvement with local football teams and wider community support."
+      },
+      {
+        "title": "Team and community coverage",
+        "imageUrl": "https://www.curry-sauces.co.uk/images/news/football-team.jpg",
+        "summary": "Another snapshot from community activity connected to the Meah's brand."
+      },
+      {
+        "title": "Luton Town football ground",
+        "imageUrl": "https://www.curry-sauces.co.uk/images/news/luton-town-footall-ground.jpg",
+        "summary": "A local-interest image highlighting the football ground environment around the news coverage."
+      },
+      {
+        "title": "Ground grey sky feature",
+        "imageUrl": "https://www.curry-sauces.co.uk/images/news/Ground_GreySky.jpg",
+        "summary": "Venue imagery associated with the site's news and sponsorship-style updates."
+      }
+    ]
+  },
+  "products": [
+    {
+      "slug": "korma",
+      "name": "Korma",
+      "shortDescription": "Mild, creamy Northern India-style sauce suitable for chicken or vegetables.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/1.jpeg",
+      "description": "Mild, smooth, and creamy Northern India-style sauce for chicken or vegetables.",
+      "ingredientsAllergens": "Includes onions, water, rapeseed oil, coconut flour, potatoes, spices, milk powder, sugar, evaporated milk, garlic, ginger, carrots, malt vinegar, creamed coconut, mango slices, and acids. Allergens include sulphites, mustard, milk, and barley.",
+      "recipeIdea": "Chicken Korma using 700g diced chicken, cooked with 2 tbsp oil, then simmered with the sauce.",
+      "nutritionPer100g": "568kJ / 137kcal, fat 9.3g, saturates 2.5g, carbohydrate 10.5g, sugars 10.0g, fibre 1.2g, protein 2.1g, salt 0.90g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening."
+    },
+    {
+      "slug": "tikka-masala",
+      "name": "Tikka Masala",
+      "shortDescription": "Rich, balanced sauce described as suitable for meat, chicken, and vegetables.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/2.jpeg",
+      "description": "Rich, rounded sauce suitable with meat, chicken, and vegetables.",
+      "ingredientsAllergens": "Full ingredient and allergen list was not available in the fetched source material and should be confirmed on the product packaging.",
+      "recipeIdea": "",
+      "nutritionPer100g": "Energy 638kJ / 154kcal per 100g, protein 2.2g, salt 1.21g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening.",
+      "note": "Full page timed out when opened, so this information is based on the product list and indexed result snippets."
+    },
+    {
+      "slug": "dhansak",
+      "name": "Dhansak",
+      "shortDescription": "Aromatic, rich, and sour sauce thickened with lentils for meat or chicken.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/3.jpeg",
+      "description": "Aromatic Gujarat-origin sauce, rich and sour, thickened with lentils.",
+      "ingredientsAllergens": "Onions, lentils, water, rapeseed oil, peeled tomatoes, potatoes, and more.",
+      "recipeIdea": "",
+      "nutritionPer100g": "Energy 446kJ / 107kcal per 100g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening.",
+      "note": "Full page timed out when opened, so this information is based on product page snippets and the product listing."
+    },
+    {
+      "slug": "madras",
+      "name": "Madras",
+      "shortDescription": "Hot Southern India-style sauce for meat or chicken.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/5.jpeg",
+      "description": "Authentic hot Southern India-style sauce for meat or chicken.",
+      "ingredientsAllergens": "Includes onions, water, rapeseed oil, potatoes, peeled tomatoes, spices, carrots, green chillies, salt, garlic, ginger, tomato puree, malt vinegar, lemon juice, green peppers, naga chillies, tamarind, and acids. Allergens include mustard, barley, and sulphites.",
+      "recipeIdea": "Beef Madras using 500g diced beef, cooked with 2 tbsp oil, then simmered in the sauce.",
+      "nutritionPer100g": "476kJ / 115kcal, fat 8.6g, saturates 0.7g, carbohydrate 5.9g, sugars 6.3g, fibre 2.2g, protein 2.0g, salt 1.27g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening."
+    },
+    {
+      "slug": "jalfrezi",
+      "name": "Jalfrezi",
+      "shortDescription": "West Bengal-style sauce with fresh green chillies and assertive spice.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/6.jpeg",
+      "description": "West Bengal-style sauce with fresh green chillies and hot spices.",
+      "ingredientsAllergens": "Includes onions, water, rapeseed oil, potatoes, green peppers, peeled tomatoes, spices, green chillies, salt, garlic, ginger, tomato puree, carrots, malt vinegar, lemon juice, coriander, mint, fenugreek, tamarind, naga chillies, and acids. Allergens include mustard, barley, and sulphites.",
+      "recipeIdea": "Lamb Jalfrezi using 500g diced lamb, cooked with 2 tbsp oil, then simmered in the sauce.",
+      "nutritionPer100g": "Nutrition details were not fully visible in the fetched page text.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening.",
+      "note": "The visible page data repeated the ingredient list and did not show a full nutrition line."
+    },
+    {
+      "slug": "rogon",
+      "name": "Rogon",
+      "shortDescription": "Kashmiri-style Rogon Josh sauce traditionally paired with lamb and spices.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/8.jpeg",
+      "description": "Kashmiri-style Rogon Josh sauce, traditionally associated with lamb, tomatoes, and many spices.",
+      "ingredientsAllergens": "Onions, water, peeled tomatoes, rapeseed oil, potatoes, and more.",
+      "recipeIdea": "",
+      "nutritionPer100g": "Energy 376kJ / 90kcal per 100g, protein 1.8g, salt 1.02g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening.",
+      "note": "Full page timed out when opened, so this information is based on indexed official snippets and the product listing."
+    },
+    {
+      "slug": "dopiaza",
+      "name": "Dopiaza",
+      "shortDescription": "Caramelised onion and pepper sauce in a \"double onion\" style.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/9.jpeg",
+      "description": "Caramelised onion and pepper sauce from South Asia; \"do piaza\" means double onion.",
+      "ingredientsAllergens": "Includes onions, water, rapeseed oil, potatoes, green peppers, red peppers, peeled tomatoes, spices, salt, garlic, ginger, tomato puree, malt vinegar, tamarind, green chillies, carrots, naga chillies, lemon juice, fenugreek, and acids. Allergens include mustard, barley, and sulphites.",
+      "recipeIdea": "King Prawn Dopiaza using 400g king prawns, stir fried briefly and simmered for 10 minutes.",
+      "nutritionPer100g": "333kJ / 80kcal, fat 5.5g, saturates 0.4g, carbohydrate 5.3g, sugars 5.4g, fibre 1.1g, protein 1.7g, salt 0.99g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening."
+    },
+    {
+      "slug": "balti",
+      "name": "Balti",
+      "shortDescription": "Punjabi and Birmingham-influenced tomato and onion sauce for prawns or meat.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/10.jpeg",
+      "description": "Named after the cooking pot; Punjabi origin, associated with Birmingham in the late 1970s; tomato and onion-rich sauce for prawns or meat.",
+      "ingredientsAllergens": "Includes onions, water, rapeseed oil, potatoes, green peppers, peeled tomatoes, spices, tomato puree, salt, garlic, ginger, carrots, lemon juice, green chillies, malt vinegar, tamarind, fenugreek, and acids. Allergens include mustard, sulphites, and barley.",
+      "recipeIdea": "Chicken Balti using 700g diced chicken, cooked with 2 tbsp oil, then simmered in the sauce.",
+      "nutritionPer100g": "415kJ / 100kcal, fat 7.2g, saturates 0.5g, carbohydrate 6.3g, sugars 6.1g, fibre 1.2g, protein 1.9g, salt 0.95g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening."
+    },
+    {
+      "slug": "patia",
+      "name": "Patia",
+      "shortDescription": "Sweet, sour and warmly spiced sauce suited to chicken, prawns or vegetables.",
+      "price": "£4.70",
+      "imageUrl": "https://www.curry-sauces.co.uk/images/products/patia.png",
+      "description": "A hot, sweet and sour Persian-style dish.",
+      "ingredientsAllergens": "Indexed ingredients begin with onions, water, peeled tomatoes, rapeseed oil, potatoes, spices, and green pepper.",
+      "recipeIdea": "Try with chicken or prawns, simmered gently after searing the main ingredient.",
+      "nutritionPer100g": "602kJ / 145kcal per 100g, fat 11.02g.",
+      "serves": "4",
+      "storage": "Keep refrigerated; consume within 4 days of opening.",
+      "note": "Patia appeared as an indexed product page even though it was not visible in the main 8-product catalogue."
+    }
+  ]
+}
