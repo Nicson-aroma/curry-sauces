@@ -40,10 +40,10 @@
   ],
   "home": {
     "sliderImages": [
-      "https://www.curry-sauces.co.uk/images/slides/1.jpg",
-      "https://www.curry-sauces.co.uk/images/slides/2.jpg",
-      "https://www.curry-sauces.co.uk/images/slides/3.jpg",
-      "https://www.curry-sauces.co.uk/images/slides/4.jpg"
+      "/asset/c1.jpg",
+      "/asset/c2.jpg",
+      "/asset/c3.jpg",
+      "/asset/c4.jpg"
     ],
     "featureImage": "https://www.curry-sauces.co.uk/images/mc.jpg",
     "title": "Welcome to Meah's Sauces",

@@ -59,9 +59,9 @@ export async function POST(request) {
 
   const totalQuantity = lineItems.reduce((total, item) => total + item.quantity, 0);
 
-  if (totalQuantity < 6) {
+  if (totalQuantity !== 6 && totalQuantity !== 12) {
     return NextResponse.json(
-      { error: "Add at least 6 sauces before going to payment." },
+      { error: "Orders must contain exactly 6 or 12 sauces before payment." },
       { status: 400 }
     );
   }

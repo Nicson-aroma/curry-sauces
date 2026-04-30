@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { Button } from "./ui/button";
-
 export default function CheckoutButton({ items, disabled }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,16 +38,15 @@ export default function CheckoutButton({ items, disabled }) {
 
   return (
     <div className="space-y-3">
-      <Button
+      <button
         type="button"
-        variant="default"
-        className="w-full"
+        className={`primary-button w-full justify-center ${disabled || isLoading ? "cursor-not-allowed opacity-60 hover:translate-y-0 hover:shadow-none" : ""}`}
         onClick={handleCheckout}
         disabled={disabled || isLoading}
       >
         {isLoading ? "Redirecting to Stripe..." : "Pay With Stripe"}
-      </Button>
-      {errorMessage ? <p className="text-sm text-error">{errorMessage}</p> : null}
+      </button>
+      {errorMessage ? <p className="text-sm text-red-700">{errorMessage}</p> : null}
     </div>
   );
 }

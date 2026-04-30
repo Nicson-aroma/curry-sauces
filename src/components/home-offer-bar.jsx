@@ -5,12 +5,23 @@ import { useEffect, useState } from "react";
 const EXIT_DURATION_MS = 350;
 const SHOW_DELAY_MS = 1500;
 const VISIBLE_DURATION_MS = 10000;
+const SESSION_KEY = "meahs-home-offer-seen";
 
 export default function HomeOfferBar() {
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    try {
+      if (window.sessionStorage.getItem(SESSION_KEY) === "true") {
+        return undefined;
+      }
+
+      window.sessionStorage.setItem(SESSION_KEY, "true");
+    } catch {
+      return undefined;
+    }
+
     const showTimer = window.setTimeout(() => {
       setIsMounted(true);
       window.requestAnimationFrame(() => {
@@ -71,7 +82,7 @@ export default function HomeOfferBar() {
         </div>
         <button
           type="button"
-          className="btn btn-xs btn-ghost"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--theme-border)] bg-white/65 text-sm font-semibold text-[color:var(--theme-foreground)]"
           onClick={() => setIsVisible(false)}
           aria-label="Close offer message"
         >
