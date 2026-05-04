@@ -32,7 +32,7 @@ export default function CartPageContent() {
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/72">Basket review</p>
           <h1 className="mt-5 text-5xl font-semibold">Your chilled sauce order</h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-white/82">
-            Orders are delivered only in valid batches of 6 or 12 jars. Adjust quantities below and continue to secure chilled delivery.
+            Orders are delivered only in valid batches of 6 jars. Adjust quantities below and continue to secure chilled delivery.
           </p>
         </div>
       </section>
@@ -118,8 +118,8 @@ export default function CartPageContent() {
               <AlertTriangle className="mt-1 h-4 w-4 shrink-0" />
               <p>
                 {isValidBatch
-                  ? "Your basket meets the 6 or 12 jar rule. Chilled delivery is included."
-                  : "Your basket must contain exactly 6 or 12 sauces before checkout can continue."}
+                  ? "Your basket meets the 6 jar rule. Chilled delivery is included."
+                  : "Your basket must contain exactly 6 sauces before checkout can continue."}
               </p>
             </div>
           </div>

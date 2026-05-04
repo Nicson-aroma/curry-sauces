@@ -111,7 +111,7 @@ export function CartProvider({ children }) {
   }
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
-  const isValidBatch = itemCount === 6 || itemCount === 12;
+  const isValidBatch = itemCount === 6;
 
   const detailedItems = useMemo(
     () =>

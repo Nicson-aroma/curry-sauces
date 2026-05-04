@@ -115,7 +115,7 @@ export default function CartDrawer() {
                   <ShoppingBag className="h-12 w-12 text-[color:var(--theme-primary)]" />
                   <p className="mt-4 text-2xl font-semibold text-[color:var(--theme-foreground)]">Your basket is empty</p>
                   <p className="mt-2 max-w-sm text-sm leading-7 text-[color:var(--theme-muted)]">
-                    Add chilled sauces to start your order. Checkout unlocks when the basket total reaches exactly 6 or 12 jars.
+                    Add chilled sauces to start your order. Checkout unlocks when the basket total reaches exactly 6 jars.
                   </p>
                   <Link
                     href="/shop"
@@ -136,8 +136,8 @@ export default function CartDrawer() {
                 </div>
                 <p className={`mt-3 rounded-2xl px-4 py-3 text-sm ${isValidBatch ? "bg-emerald-500/12 text-emerald-900" : "bg-amber-500/14 text-amber-900"}`}>
                   {isValidBatch
-                    ? "Basket valid. Chilled delivery is included with your 6 or 12 jar order."
-                    : "Orders must contain exactly 6 or 12 sauces. Adjust quantities to continue."}
+                    ? "Basket valid. Chilled delivery is included with your 6 jar order."
+                    : "Orders must contain exactly 6 sauces. Adjust quantities to continue."}
                 </p>
                 <p className="mt-3 text-xs uppercase tracking-[0.22em] text-[color:var(--theme-muted)]">
                   Chilled product. Refrigerate on delivery.

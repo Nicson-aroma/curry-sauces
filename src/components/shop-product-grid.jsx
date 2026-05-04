@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import ProductImage from "./product-image";
 import { buttonVariants } from "./ui/button";
@@ -10,7 +9,6 @@ import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
 
 function ProductDetailsModal({ product, onClose }) {
-  const router = useRouter();
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -41,12 +39,6 @@ function ProductDetailsModal({ product, onClose }) {
   function handleAddToCart() {
     addItem(product.slug, 1);
     onClose();
-  }
-
-  function handleBuyNow() {
-    addItem(product.slug, 1);
-    onClose();
-    router.push("/cart");
   }
 
   return (
@@ -131,13 +123,6 @@ function ProductDetailsModal({ product, onClose }) {
             ) : null}
 
             <div className="product-modal-actions">
-              <button
-                type="button"
-                className={buttonVariants({ variant: "outline", size: "default" })}
-                onClick={handleBuyNow}
-              >
-                Buy Now
-              </button>
               <button
                 type="button"
                 className={buttonVariants({ variant: "default", size: "default" })}
