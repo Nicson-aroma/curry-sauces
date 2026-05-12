@@ -1,4 +1,5 @@
 import siteContent from "../data/site-content.json";
+import blogPosts from "../data/blog-posts.json";
 
 const PRICE_GBP = 4.7;
 
@@ -210,6 +211,8 @@ export const homeContent = siteContent.home;
 export const heritageContent = siteContent.heritage;
 export const eventsContent = siteContent.events;
 export const newsContent = siteContent.news;
+export const blogContent = blogPosts;
+export const blogPostsBySlug = Object.fromEntries(blogPosts.map((post) => [post.slug, post]));
 
 export const products = siteContent.products
   .filter((product) => sauceMeta[product.slug])
@@ -319,4 +322,8 @@ export const productDetailsBySlug = Object.fromEntries(
 
 export function getProductDetails(slug) {
   return productDetailsBySlug[slug] ?? null;
+}
+
+export function getBlogPost(slug) {
+  return blogPostsBySlug[slug] ?? null;
 }
