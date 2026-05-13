@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Setup
 
-## Getting Started
+Install dependencies and add the required environment variables:
 
-First, run the development server:
+```bash
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=...
+STRIPE_SECRET_KEY=...
+MONGODB_URI=mongodb://127.0.0.1:27017/meahs_website
+MONGODB_DB=meahs_website
+```
+
+Then start MongoDB locally or point `MONGODB_URI` at your hosted cluster and run:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## MongoDB persistence
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The project now stores staff users and order history in MongoDB instead of browser `localStorage`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Manager sign-up writes pending staff accounts to the `users` collection.
+- Admin and manager order updates write to the `orders` collection.
+- Stripe checkout creates an order record before redirecting to payment.
+- Checkout success finalizes the order in MongoDB using the Stripe session ID.
+- The default admin account is automatically seeded on first use.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If MongoDB is unavailable or `MONGODB_URI` is missing, the staff dashboard and checkout order persistence APIs will return an error until the database is configured.

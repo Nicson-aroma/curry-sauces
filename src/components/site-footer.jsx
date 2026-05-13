@@ -1,7 +1,11 @@
+ "use client";
+
 import Link from "next/link";
 import { BadgeCheck, Camera, Mail, MapPin, Phone, Send } from "lucide-react";
+import { useState } from "react";
 
 import { brand, featuredProducts, navLinks } from "../lib/meahs-data";
+import { subscribeEmail } from "../lib/subscribe";
 
 const iconMap = {
   Facebook: BadgeCheck,
@@ -10,6 +14,26 @@ const iconMap = {
 };
 
 export default function SiteFooter() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  async function handleSubscribe(event) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setFeedback("");
+
+    try {
+      await subscribeEmail({ email, source: "site_footer" });
+      setFeedback("Subscribed. Thanks for joining the mailing list.");
+      setEmail("");
+    } catch (error) {
+      setFeedback(error.message || "Unable to subscribe right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <footer className="mt-20 border-t border-white/10 bg-[#1A120E] text-[#F8E6D4]">
       <div className="mx-auto grid max-w-[1260px] gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-[1.2fr_0.9fr_0.9fr_1.1fr] lg:px-6">
@@ -19,19 +43,24 @@ export default function SiteFooter() {
           <p className="mt-4 max-w-md text-sm leading-7 text-[#E4C7AA]/72">
             Premium chilled sauces for family dinners, wholesale supply, market tastings, and home cooks who want authentic flavour fast.
           </p>
-          <form className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <form onSubmit={handleSubscribe} className="mt-6 flex flex-col gap-3 sm:flex-row">
             <input
               type="email"
               placeholder="Newsletter email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
               className="h-12 flex-1 rounded-full border border-white/10 bg-white/6 px-4 text-sm text-white outline-none placeholder:text-[#E4C7AA]/45"
             />
             <button
-              type="button"
+              type="submit"
+              disabled={isSubmitting}
               className="rounded-full bg-[#D9A625] px-5 py-3 text-sm font-semibold text-[#1A120E] transition hover:-translate-y-0.5"
             >
-              Subscribe
+              {isSubmitting ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
+          {feedback ? <p className="mt-3 text-sm text-[#E4C7AA]/78">{feedback}</p> : null}
         </div>
 
         <div>

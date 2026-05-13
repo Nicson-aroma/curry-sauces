@@ -8,7 +8,7 @@ import { useStaff } from "../../../components/staff-provider";
 
 export default function ManagerSignInPage() {
   const router = useRouter();
-  const { signIn, currentUser, canAccessDashboard, useDefaultAdmin } = useStaff();
+  const { signIn, currentUser, canAccessDashboard, useDefaultAdmin: signInWithDefaultAdmin } = useStaff();
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -26,21 +26,25 @@ export default function ManagerSignInPage() {
     setFormValues((current) => ({ ...current, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
 
     try {
-      signIn(formValues);
+      await signIn(formValues);
       router.push("/admin");
     } catch (error) {
       setErrorMessage(error.message || "Unable to sign in.");
     }
   }
 
-  function handleAdminAccess() {
-    useDefaultAdmin();
-    router.push("/admin");
+  async function handleAdminAccess() {
+    try {
+      await signInWithDefaultAdmin();
+      router.push("/admin");
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to use the default admin account.");
+    }
   }
 
   return (

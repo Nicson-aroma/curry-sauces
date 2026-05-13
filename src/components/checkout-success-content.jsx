@@ -12,13 +12,26 @@ export default function CheckoutSuccessContent() {
   const sessionId = searchParams.get("session_id");
   const { clearCart } = useCart();
   const [createdOrderId, setCreatedOrderId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const createdOrder = finalizePendingOrder(sessionId);
-    if (createdOrder?.id) {
-      setCreatedOrderId(createdOrder.id);
-      clearCart();
+    async function completeOrder() {
+      if (!sessionId) {
+        return;
+      }
+
+      try {
+        const createdOrder = await finalizePendingOrder(sessionId);
+        if (createdOrder?.id) {
+          setCreatedOrderId(createdOrder.id);
+          clearCart();
+        }
+      } catch (error) {
+        setErrorMessage(error.message || "We could not confirm your order automatically.");
+      }
     }
+
+    completeOrder();
   }, [clearCart, sessionId]);
 
   return (
@@ -35,6 +48,7 @@ export default function CheckoutSuccessContent() {
               Order reference: {createdOrderId}
             </p>
           ) : null}
+          {errorMessage ? <p className="mt-4 text-sm text-white/84">{errorMessage}</p> : null}
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/shop" className="primary-button bg-white text-[#1D5E34]">Return to shop</Link>
             <Link href="/admin" className="secondary-button border-white/24 bg-white/12 text-white">Open staff dashboard</Link>

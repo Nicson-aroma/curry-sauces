@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { storePendingOrder } from "../lib/staff-storage";
-
 export default function CheckoutButton({ items, disabled }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,7 +29,6 @@ export default function CheckoutButton({ items, disabled }) {
         throw new Error("Stripe checkout URL was not returned.");
       }
 
-      storePendingOrder(items);
       window.location.href = payload.url;
     } catch (error) {
       setErrorMessage(error.message || "Checkout failed.");

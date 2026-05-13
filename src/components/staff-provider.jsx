@@ -5,14 +5,22 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {
   authenticateStaffUser,
   canAccessDashboard,
+  createOrder,
   createPendingManagerAccount,
-  ensureStaffStorage,
+  createSubscriber,
+  createUser,
+  deleteOrder,
+  deleteSubscriber,
+  deleteUser,
   getCurrentUser,
-  getOrders,
-  getUsers,
+  getStaffSnapshot,
+  setCurrentUserSession,
   signInAsDefaultAdmin,
   signOutStaffUser,
+  updateOrder,
   updateOrderStatus,
+  updateSubscriber,
+  updateUser,
   updateUserRole,
 } from "../lib/staff-storage";
 
@@ -26,36 +34,61 @@ export function StaffProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
   const [isReady, setIsReady] = useState(false);
 
-  function refresh() {
-    ensureStaffStorage();
-    setCurrentUser(getCurrentUser());
-    setUsers(sanitizeUsers(getUsers()));
-    setOrders(getOrders());
+  async function refresh() {
+    const storedUser = getCurrentUser();
+    const snapshot = await getStaffSnapshot();
+    const nextUsers = sanitizeUsers(snapshot.users);
+    const matchedUser = storedUser
+      ? nextUsers.find((user) => user.id === storedUser.id) || null
+      : null;
+
+    setCurrentUserSession(matchedUser);
+    setCurrentUser(matchedUser);
+    setUsers(nextUsers);
+    setOrders(snapshot.orders);
+    setSubscribers(Array.isArray(snapshot.subscribers) ? snapshot.subscribers : []);
   }
 
   useEffect(() => {
-    refresh();
-    setIsReady(true);
+    let isMounted = true;
+
+    async function loadStaffData() {
+      try {
+        await refresh();
+      } finally {
+        if (isMounted) {
+          setIsReady(true);
+        }
+      }
+    }
+
+    loadStaffData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  function signUp(formValues) {
-    const user = createPendingManagerAccount(formValues);
-    setUsers(sanitizeUsers(getUsers()));
+  async function signUp(formValues) {
+    const user = await createPendingManagerAccount(formValues);
+    await refresh();
     return user;
   }
 
-  function signIn(formValues) {
-    const user = authenticateStaffUser(formValues);
+  async function signIn(formValues) {
+    const user = await authenticateStaffUser(formValues);
     setCurrentUser(user);
-    setUsers(sanitizeUsers(getUsers()));
+    await refresh();
     return user;
   }
 
-  function useDefaultAdmin() {
-    const user = signInAsDefaultAdmin();
+  async function useDefaultAdmin() {
+    const user = await signInAsDefaultAdmin();
     setCurrentUser(user);
+    await refresh();
     return user;
   }
 
@@ -64,15 +97,79 @@ export function StaffProvider({ children }) {
     setCurrentUser(null);
   }
 
-  function changeUserRole(userId, role) {
-    const updatedUsers = updateUserRole(userId, role);
+  async function changeUserRole(userId, role) {
+    const updatedUsers = await updateUserRole(userId, role);
     setUsers(updatedUsers);
-    setCurrentUser(getCurrentUser());
+    const storedUser = getCurrentUser();
+    const matchedUser = storedUser
+      ? updatedUsers.find((user) => user.id === storedUser.id) || null
+      : null;
+    setCurrentUserSession(matchedUser);
+    setCurrentUser(matchedUser);
   }
 
-  function changeOrderStatus(orderId, status) {
-    const updatedOrders = updateOrderStatus(orderId, status);
+  async function changeOrderStatus(orderId, status) {
+    const updatedOrders = await updateOrderStatus(orderId, status);
     setOrders(updatedOrders);
+  }
+
+  async function createDashboardUser(formValues) {
+    const user = await createUser(formValues);
+    await refresh();
+    return user;
+  }
+
+  async function updateDashboardUser(userId, formValues) {
+    const updatedUsers = await updateUser(userId, formValues);
+    setUsers(updatedUsers);
+    const storedUser = getCurrentUser();
+    const matchedUser = storedUser
+      ? updatedUsers.find((user) => user.id === storedUser.id) || null
+      : null;
+    setCurrentUserSession(matchedUser);
+    setCurrentUser(matchedUser);
+  }
+
+  async function deleteDashboardUser(userId) {
+    const updatedUsers = await deleteUser(userId);
+    setUsers(updatedUsers);
+    const storedUser = getCurrentUser();
+    const matchedUser = storedUser
+      ? updatedUsers.find((user) => user.id === storedUser.id) || null
+      : null;
+    setCurrentUserSession(matchedUser);
+    setCurrentUser(matchedUser);
+  }
+
+  async function createDashboardOrder(formValues) {
+    const updatedOrders = await createOrder(formValues);
+    setOrders(updatedOrders);
+  }
+
+  async function updateDashboardOrder(orderId, formValues) {
+    const updatedOrders = await updateOrder(orderId, formValues);
+    setOrders(updatedOrders);
+  }
+
+  async function deleteDashboardOrder(orderId) {
+    const updatedOrders = await deleteOrder(orderId);
+    setOrders(updatedOrders);
+  }
+
+  async function createDashboardSubscriber(formValues) {
+    const subscriber = await createSubscriber(formValues);
+    await refresh();
+    return subscriber;
+  }
+
+  async function updateDashboardSubscriber(subscriberId, formValues) {
+    const updatedSubscribers = await updateSubscriber(subscriberId, formValues);
+    setSubscribers(updatedSubscribers);
+  }
+
+  async function deleteDashboardSubscriber(subscriberId) {
+    const updatedSubscribers = await deleteSubscriber(subscriberId);
+    setSubscribers(updatedSubscribers);
   }
 
   return (
@@ -81,6 +178,7 @@ export function StaffProvider({ children }) {
         currentUser,
         users,
         orders,
+        subscribers,
         isReady,
         canAccessDashboard: canAccessDashboard(currentUser),
         signIn,
@@ -89,6 +187,15 @@ export function StaffProvider({ children }) {
         useDefaultAdmin,
         changeUserRole,
         changeOrderStatus,
+        createDashboardUser,
+        updateDashboardUser,
+        deleteDashboardUser,
+        createDashboardOrder,
+        updateDashboardOrder,
+        deleteDashboardOrder,
+        createDashboardSubscriber,
+        updateDashboardSubscriber,
+        deleteDashboardSubscriber,
         refresh,
       }}
     >

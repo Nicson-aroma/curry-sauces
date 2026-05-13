@@ -2,12 +2,28 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ChevronRight,
+  LayoutDashboard,
+  LogOut,
+  Search,
+  Settings,
+  ShoppingBag,
+  Users,
+} from "lucide-react";
 
 import { useStaff } from "../../components/staff-provider";
 import { DEFAULT_ADMIN, STAFF_ROLES } from "../../lib/staff-storage";
 
 const statusOptions = ["new", "processing", "ready", "completed", "cancelled"];
+
+const sidebarItems = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "orders", label: "Orders", icon: ShoppingBag },
+  { id: "staff", label: "Staff", icon: Users },
+  { id: "workflow", label: "Workflow", icon: Settings },
+];
 
 function formatCurrency(amount) {
   return new Intl.NumberFormat("en-GB", {
@@ -23,6 +39,56 @@ function formatDate(value) {
   }).format(new Date(value));
 }
 
+function MetricCard({ label, value, helper }) {
+  return (
+    <article className="rounded-[22px] border border-[#dbe6ee] bg-white p-6">
+      <p className="text-base font-medium text-[#34495d]">{label}</p>
+      <p className="mt-5 text-5xl font-semibold tracking-[-0.05em] text-[#ff5b08]">{value}</p>
+      <p className="mt-4 text-sm leading-6 text-[#7a93ab]">{helper}</p>
+    </article>
+  );
+}
+
+function Panel({ id, title, eyebrow, actions, children }) {
+  return (
+    <section
+      id={id}
+      className="rounded-[22px] border border-[#dbe6ee] bg-white p-6 shadow-[0_4px_10px_rgba(33,55,80,0.04)]"
+    >
+      <div className="flex flex-col gap-4 border-b border-[#e7eef5] pb-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#7d95ab]">
+            {eyebrow}
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold text-[#31465b]">{title}</h2>
+        </div>
+        {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+      </div>
+      <div className="mt-6">{children}</div>
+    </section>
+  );
+}
+
+function SidebarButton({ active, icon: Icon, label, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center justify-between border-b-2 px-6 py-5 text-left transition ${
+        active
+          ? "border-[#ff5b08] bg-[#ff5b08] text-white"
+          : "border-[#ff5b08] bg-transparent text-white hover:bg-white/5"
+      }`}
+    >
+      <span className="flex items-center gap-3">
+        <Icon className="h-5 w-5" />
+        <span className="text-[15px] font-medium">{label}</span>
+      </span>
+      <ChevronRight className="h-4 w-4 opacity-85" />
+    </button>
+  );
+}
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const {
@@ -36,6 +102,8 @@ export default function AdminDashboardPage() {
     changeUserRole,
     changeOrderStatus,
   } = useStaff();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeSection, setActiveSection] = useState("dashboard");
 
   useEffect(() => {
     if (isReady && currentUser && !canAccessDashboard) {
@@ -43,10 +111,54 @@ export default function AdminDashboardPage() {
     }
   }, [canAccessDashboard, currentUser, isReady, router]);
 
+  const filteredOrders = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) {
+      return orders;
+    }
+
+    return orders.filter((order) =>
+      [
+        order.id,
+        order.customerName,
+        order.customerEmail,
+        order.status,
+        order.paymentStatus,
+        ...(order.items || []).map((item) => item.name),
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(query)
+    );
+  }, [orders, searchTerm]);
+
+  const filteredUsers = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) {
+      return users;
+    }
+
+    return users.filter((user) =>
+      [user.name, user.email, user.role].join(" ").toLowerCase().includes(query)
+    );
+  }, [users, searchTerm]);
+
+  function jumpToSection(sectionId) {
+    setActiveSection(sectionId);
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   if (!isReady) {
     return (
-      <main className="min-h-screen bg-[#120d0a] px-4 py-12 text-white">
-        <section className="mx-auto max-w-4xl rounded-[34px] border border-white/10 bg-white/6 p-10">
+      <main className="min-h-screen bg-[#8ea3bb] px-4 py-12 text-white">
+        <section className="mx-auto max-w-4xl rounded-[28px] bg-[#2f4153] p-10 shadow-[0_24px_80px_rgba(39,60,86,0.28)]">
           Loading staff dashboard...
         </section>
       </main>
@@ -55,16 +167,24 @@ export default function AdminDashboardPage() {
 
   if (!currentUser) {
     return (
-      <main className="min-h-screen bg-[linear-gradient(180deg,#120d0a,#311b12_45%,#fff7ea_100%)] px-4 py-10">
-        <section className="mx-auto max-w-3xl rounded-[40px] border border-white/10 bg-white/94 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.18)] md:p-10">
-          <p className="section-eyebrow">Admin panel</p>
-          <h1 className="mt-4 text-4xl font-semibold">Staff dashboard</h1>
-          <p className="mt-5 text-base leading-8 text-[color:var(--theme-muted)]">
-            This admin panel is hidden from the public navigation. Use the default admin account or sign in with an approved manager account.
-          </p>
-          <div className="mt-8 rounded-[28px] border border-[color:var(--theme-border)] bg-[color:var(--theme-surface)]/72 p-6">
-            <p className="font-semibold text-[color:var(--theme-primary)]">Seeded admin account</p>
-            <p className="mt-3 text-sm leading-7">
+      <main className="min-h-screen bg-[#8ea3bb] px-4 py-10">
+        <section className="mx-auto max-w-4xl rounded-[30px] bg-[#dcecf7] p-6 shadow-[0_24px_80px_rgba(39,60,86,0.28)] md:p-8">
+          <div className="rounded-[24px] bg-[#ff5b08] px-6 py-7 text-white">
+            <p className="text-xs uppercase tracking-[0.28em] text-white/75">Admin panel</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">
+              Staff dashboard access
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/82">
+              This route is hidden from the public site navigation. Use the seeded admin account or
+              sign in with an approved manager account.
+            </p>
+          </div>
+
+          <div className="mt-6 rounded-[24px] bg-white p-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#7d95ab]">
+              Seeded admin account
+            </p>
+            <p className="mt-4 text-sm leading-7 text-[#31465b]">
               Email: <span className="font-semibold">{DEFAULT_ADMIN.email}</span>
               <br />
               Password: <span className="font-semibold">{DEFAULT_ADMIN.password}</span>
@@ -95,152 +215,220 @@ export default function AdminDashboardPage() {
   const totalRevenue = orders.reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(245,166,35,0.18),transparent_24%),linear-gradient(180deg,#1a120e,#2b1710_38%,#fff7ea_100%)] px-4 py-8">
-      <section className="mx-auto max-w-7xl">
-        <div className="rounded-[36px] border border-white/10 bg-white/96 p-6 shadow-[0_26px_80px_rgba(0,0,0,0.22)] md:p-8">
-          <div className="flex flex-col gap-4 border-b border-[color:var(--theme-border)] pb-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="section-eyebrow">Hidden staff workspace</p>
-              <h1 className="mt-3 text-4xl font-semibold">Order management dashboard</h1>
-              <p className="mt-4 max-w-3xl text-base leading-8 text-[color:var(--theme-muted)]">
-                Admins can approve staff accounts and managers can update order statuses. No sign in or sign up links were added to the public site navigation.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="rounded-full border border-[color:var(--theme-border)] bg-[color:var(--theme-surface)] px-4 py-2 text-sm font-semibold">
-                {currentUser.name} • {currentUser.role}
-              </div>
-              <button type="button" onClick={signOut} className="secondary-button">
-                Sign out
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <article className="rounded-[28px] border border-[color:var(--theme-border)] bg-[linear-gradient(135deg,#8B1E1E,#C34D22)] p-6 text-white">
-              <p className="text-sm uppercase tracking-[0.24em] text-white/74">Total orders</p>
-              <p className="mt-4 text-4xl font-semibold">{orders.length}</p>
-            </article>
-            <article className="rounded-[28px] border border-[color:var(--theme-border)] bg-white p-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-[color:var(--theme-muted)]">Pending staff</p>
-              <p className="mt-4 text-4xl font-semibold">{pendingUsers}</p>
-            </article>
-            <article className="rounded-[28px] border border-[color:var(--theme-border)] bg-white p-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-[color:var(--theme-muted)]">Active managers</p>
-              <p className="mt-4 text-4xl font-semibold">{activeManagers}</p>
-            </article>
-            <article className="rounded-[28px] border border-[color:var(--theme-border)] bg-white p-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-[color:var(--theme-muted)]">Tracked revenue</p>
-              <p className="mt-4 text-4xl font-semibold">{formatCurrency(totalRevenue)}</p>
-            </article>
-          </div>
-
-          <div className="mt-8 grid gap-8 xl:grid-cols-[1.4fr_0.9fr]">
-            <section className="rounded-[32px] border border-[color:var(--theme-border)] bg-white/86 p-6 shadow-[0_18px_46px_rgba(0,0,0,0.06)]">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="section-eyebrow">Orders</p>
-                  <h2 className="mt-2 text-3xl font-semibold">Manage customer orders</h2>
-                </div>
-                <Link href="/shop" className="secondary-button">
-                  View storefront
-                </Link>
-              </div>
-
-              <div className="mt-6 space-y-4">
-                {orders.map((order) => (
-                  <article key={order.id} className="rounded-[26px] border border-[color:var(--theme-border)] bg-[color:var(--theme-surface)]/52 p-5">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[color:var(--theme-muted)]">
-                          {order.id}
-                        </p>
-                        <h3 className="mt-2 text-2xl font-semibold">{order.customerName}</h3>
-                        <p className="mt-2 text-sm text-[color:var(--theme-muted)]">
-                          {order.customerEmail} • {formatDate(order.createdAt)}
-                        </p>
-                        <p className="mt-3 text-sm leading-7 text-[color:var(--theme-foreground)]">
-                          {order.items.map((item) => `${item.name} x${item.quantity}`).join(", ")}
-                        </p>
-                      </div>
-                      <div className="flex min-w-[220px] flex-col gap-3">
-                        <div className="rounded-[22px] bg-white/86 px-4 py-3 text-sm">
-                          <p className="font-semibold">Payment: {order.paymentStatus}</p>
-                          <p className="mt-1">Total: {formatCurrency(order.totalAmount)}</p>
-                          <p className="mt-1">Items: {order.totalItems}</p>
-                        </div>
-                        <label className="field-shell text-sm">
-                          Order status
-                          <select
-                            className="field-input"
-                            value={order.status}
-                            onChange={(event) => changeOrderStatus(order.id, event.target.value)}
-                          >
-                            {statusOptions.map((status) => (
-                              <option key={status} value={status}>
-                                {status}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                      </div>
+    <main className="min-h-screen bg-[#8ea3bb] px-4 py-8">
+      <section className="mx-auto max-w-[1500px]">
+        <div className="overflow-hidden rounded-[30px] bg-[#dcecf7] shadow-[0_26px_90px_rgba(39,60,86,0.30)]">
+          <div className="grid lg:grid-cols-[290px_minmax(0,1fr)]">
+            <aside className="bg-[#2f4153] text-white">
+              <div className="flex h-full flex-col">
+                <div className="px-8 py-14 text-center">
+                  <div className="mx-auto flex h-44 w-44 items-center justify-center rounded-full bg-[#ff5b08]">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-4xl font-semibold text-[#2f4153]">
+                      {String(currentUser.name || "A").charAt(0).toUpperCase()}
                     </div>
-                  </article>
-                ))}
-              </div>
-            </section>
+                  </div>
+                  <p className="mt-8 text-sm text-white/70">Signed in as</p>
+                  <h2 className="mt-2 text-[2rem] font-medium tracking-[-0.04em]">
+                    @{currentUser.name.replaceAll(" ", "_")}
+                  </h2>
+                  <p className="mt-3 text-xs uppercase tracking-[0.26em] text-white/55">
+                    {currentUser.role}
+                  </p>
+                </div>
 
-            <section className="space-y-8">
-              <article className="rounded-[32px] border border-[color:var(--theme-border)] bg-white/88 p-6 shadow-[0_18px_46px_rgba(0,0,0,0.06)]">
-                <p className="section-eyebrow">Staff approvals</p>
-                <h2 className="mt-2 text-3xl font-semibold">Manage user roles</h2>
-                <div className="mt-6 space-y-4">
-                  {users.map((user) => (
-                    <div key={user.id} className="rounded-[24px] border border-[color:var(--theme-border)] bg-[color:var(--theme-surface)]/56 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-lg font-semibold">{user.name}</p>
-                          <p className="mt-1 text-sm text-[color:var(--theme-muted)]">{user.email}</p>
-                        </div>
-                        <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--theme-primary)]">
-                          {user.role}
-                        </span>
-                      </div>
-                      {currentUser.role === STAFF_ROLES.ADMIN ? (
-                        <label className="field-shell mt-4 text-sm">
-                          Change role
-                          <select
-                            className="field-input"
-                            value={user.role}
-                            onChange={(event) => changeUserRole(user.id, event.target.value)}
-                            disabled={user.email === DEFAULT_ADMIN.email}
+                <nav className="pb-8">
+                  {sidebarItems.map((item) => (
+                    <SidebarButton
+                      key={item.id}
+                      active={activeSection === item.id}
+                      icon={item.icon}
+                      label={item.label}
+                      onClick={() => jumpToSection(item.id)}
+                    />
+                  ))}
+                </nav>
+              </div>
+            </aside>
+
+            <div>
+              <div className="bg-[#ff5b08] px-6 py-8 md:px-8">
+                <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                  <label className="flex w-full max-w-3xl items-center gap-4 rounded-full border-4 border-white px-6 py-4 text-white">
+                    <Search className="h-7 w-7 shrink-0" />
+                    <input
+                      className="w-full bg-transparent text-xl outline-none placeholder:text-white/80"
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={signOut}
+                    className="inline-flex items-center gap-3 text-xl font-medium text-white"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    Logout
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-8 px-6 py-8 md:px-8">
+                <div id="dashboard" className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                  <MetricCard
+                    label="Total Orders"
+                    value={orders.length}
+                    helper={`${filteredOrders.length} matching current search`}
+                  />
+                  <MetricCard
+                    label="Pending Staff"
+                    value={pendingUsers}
+                    helper="Waiting for admin approval"
+                  />
+                  <MetricCard
+                    label="Active Managers"
+                    value={activeManagers}
+                    helper="Approved manager accounts"
+                  />
+                  <MetricCard
+                    label="Tracked Revenue"
+                    value={formatCurrency(totalRevenue)}
+                    helper="Based on recorded order totals"
+                  />
+                </div>
+
+                <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+                  <Panel
+                    id="orders"
+                    eyebrow="Orders"
+                    title="Manage customer orders"
+                    actions={
+                      <Link href="/shop" className="secondary-button">
+                        View storefront
+                      </Link>
+                    }
+                  >
+                    <div className="space-y-4">
+                      {filteredOrders.length ? (
+                        filteredOrders.map((order) => (
+                          <article
+                            key={order.id}
+                            className="rounded-[20px] border border-[#dde8f0] bg-[#fdfefe] p-5"
                           >
-                            <option value={STAFF_ROLES.PENDING}>pending</option>
-                            <option value={STAFF_ROLES.MANAGER}>manager</option>
-                            <option value={STAFF_ROLES.ADMIN}>admin</option>
-                          </select>
-                        </label>
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                              <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7d95ab]">
+                                  {order.id}
+                                </p>
+                                <h3 className="mt-2 text-2xl font-semibold text-[#31465b]">
+                                  {order.customerName}
+                                </h3>
+                                <p className="mt-2 text-sm text-[#7a93ab]">
+                                  {order.customerEmail} • {formatDate(order.createdAt)}
+                                </p>
+                                <p className="mt-3 text-sm leading-7 text-[#41576c]">
+                                  {order.items.map((item) => `${item.name} x${item.quantity}`).join(", ")}
+                                </p>
+                              </div>
+                              <div className="flex min-w-[260px] flex-col gap-3">
+                                <div className="rounded-[18px] bg-[#eef5fb] px-4 py-4 text-sm text-[#31465b]">
+                                  <p className="font-semibold">Payment: {order.paymentStatus}</p>
+                                  <p className="mt-1">Total: {formatCurrency(order.totalAmount)}</p>
+                                  <p className="mt-1">Items: {order.totalItems}</p>
+                                </div>
+                                <label className="field-shell text-sm">
+                                  Order status
+                                  <select
+                                    className="field-input"
+                                    value={order.status}
+                                    onChange={(event) => changeOrderStatus(order.id, event.target.value)}
+                                  >
+                                    {statusOptions.map((status) => (
+                                      <option key={status} value={status}>
+                                        {status}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </label>
+                              </div>
+                            </div>
+                          </article>
+                        ))
                       ) : (
-                        <p className="mt-4 text-sm text-[color:var(--theme-muted)]">
-                          Only admins can change staff roles.
-                        </p>
+                        <div className="rounded-[20px] border border-dashed border-[#c8d8e6] bg-white p-6 text-sm text-[#7a93ab]">
+                          No orders match the current search.
+                        </div>
                       )}
                     </div>
-                  ))}
-                </div>
-              </article>
+                  </Panel>
 
-              <article className="rounded-[32px] border border-[color:var(--theme-border)] bg-[linear-gradient(135deg,#1D5E34,#2E7D32,#7FB54A)] p-6 text-white shadow-[0_18px_46px_rgba(0,0,0,0.12)]">
-                <p className="text-sm uppercase tracking-[0.24em] text-white/76">Workflow</p>
-                <h2 className="mt-2 text-3xl font-semibold">How staff access works</h2>
-                <ul className="mt-5 space-y-3 text-sm leading-7 text-white/84">
-                  <li>Managers create an account on the hidden sign-up page.</li>
-                  <li>New accounts start as pending and cannot view orders yet.</li>
-                  <li>An admin changes the role to manager or admin from this dashboard.</li>
-                  <li>Approved staff then sign in and can manage order statuses.</li>
-                </ul>
-              </article>
-            </section>
+                  <div className="space-y-8">
+                    <Panel id="staff" eyebrow="Staff" title="Manage user roles">
+                      <div className="space-y-4">
+                        {filteredUsers.length ? (
+                          filteredUsers.map((user) => (
+                            <article
+                              key={user.id}
+                              className="rounded-[20px] border border-[#dde8f0] bg-[#fdfefe] p-5"
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="text-lg font-semibold text-[#31465b]">{user.name}</p>
+                                  <p className="mt-1 text-sm text-[#7a93ab]">{user.email}</p>
+                                </div>
+                                <span className="rounded-full bg-[#eef5fb] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#ff5b08]">
+                                  {user.role}
+                                </span>
+                              </div>
+                              {currentUser.role === STAFF_ROLES.ADMIN ? (
+                                <label className="field-shell mt-4 text-sm">
+                                  Change role
+                                  <select
+                                    className="field-input"
+                                    value={user.role}
+                                    onChange={(event) => changeUserRole(user.id, event.target.value)}
+                                    disabled={user.email === DEFAULT_ADMIN.email}
+                                  >
+                                    <option value={STAFF_ROLES.PENDING}>pending</option>
+                                    <option value={STAFF_ROLES.MANAGER}>manager</option>
+                                    <option value={STAFF_ROLES.ADMIN}>admin</option>
+                                  </select>
+                                </label>
+                              ) : (
+                                <p className="mt-4 text-sm text-[#7a93ab]">
+                                  Only admins can change staff roles.
+                                </p>
+                              )}
+                            </article>
+                          ))
+                        ) : (
+                          <div className="rounded-[20px] border border-dashed border-[#c8d8e6] bg-white p-6 text-sm text-[#7a93ab]">
+                            No staff accounts match the current search.
+                          </div>
+                        )}
+                      </div>
+                    </Panel>
+
+                    <Panel id="workflow" eyebrow="Workflow" title="How staff access works">
+                      <div className="space-y-4 text-sm leading-7 text-[#6e879e]">
+                        <div className="rounded-[18px] bg-[#eef5fb] px-4 py-4">
+                          Managers create an account on the hidden sign-up page.
+                        </div>
+                        <div className="rounded-[18px] bg-[#eef5fb] px-4 py-4">
+                          New accounts start as pending and cannot view orders yet.
+                        </div>
+                        <div className="rounded-[18px] bg-[#eef5fb] px-4 py-4">
+                          An admin changes the role to manager or admin from this dashboard.
+                        </div>
+                        <div className="rounded-[18px] bg-[#eef5fb] px-4 py-4">
+                          Approved staff then sign in and can manage order statuses.
+                        </div>
+                      </div>
+                    </Panel>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -4,10 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Mail, Sparkles, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { subscribeEmail } from "../lib/subscribe";
+
 const STORAGE_KEY = "meahs-newsletter-dismissed";
 
 export default function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     function handleScroll() {
@@ -32,6 +37,22 @@ export default function NewsletterPopup() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  async function handleSubscribe() {
+    setIsSubmitting(true);
+    setFeedback("");
+
+    try {
+      await subscribeEmail({ email, source: "newsletter_popup" });
+      setFeedback("Subscribed. Watch your inbox for updates.");
+      setEmail("");
+      window.setTimeout(() => setIsOpen(false), 1000);
+    } catch (error) {
+      setFeedback(error.message || "Unable to subscribe right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -73,17 +94,21 @@ export default function NewsletterPopup() {
                 <input
                   type="email"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40"
                 />
               </label>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={handleSubscribe}
+                disabled={isSubmitting}
                 className="rounded-full bg-[color:var(--theme-secondary)] px-5 py-3 text-sm font-semibold text-[color:var(--theme-foreground)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_36px_rgba(0,0,0,0.22)]"
               >
-                Subscribe
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
               </button>
             </div>
+            {feedback ? <p className="mt-3 text-sm text-white/80">{feedback}</p> : null}
           </motion.div>
         </>
       ) : null}

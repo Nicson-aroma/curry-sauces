@@ -22,13 +22,13 @@ export default function ManagerSignUpPage() {
     setFormValues((current) => ({ ...current, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
 
     try {
-      signUp(formValues);
+      await signUp(formValues);
       setSuccessMessage(
         "Account created. An admin must change your role from pending to manager before you can view orders."
       );

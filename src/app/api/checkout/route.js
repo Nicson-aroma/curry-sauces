@@ -3,6 +3,7 @@ import Stripe from "stripe";
 
 import { getProductDetails } from "../../../lib/meahs-data";
 import { priceToPence } from "../../../lib/pricing";
+import { createOrderRecord } from "../../../lib/staff-store-server";
 
 export async function POST(request) {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -24,6 +25,7 @@ export async function POST(request) {
   }
 
   const items = Array.isArray(payload?.items) ? payload.items : [];
+  const customer = payload?.customer && typeof payload.customer === "object" ? payload.customer : {};
 
   if (!items.length) {
     return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
@@ -71,10 +73,16 @@ export async function POST(request) {
     const origin = request.headers.get("origin") || request.nextUrl.origin;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      billing_address_collection: "auto",
+      billing_address_collection: "required",
       line_items: lineItems,
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout/cancel`,
+    });
+
+    await createOrderRecord({
+      items,
+      customer,
+      stripeSessionId: session.id,
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
