@@ -58,7 +58,7 @@ export default function AdminDashboardPage() {
       <main className="min-h-screen bg-[linear-gradient(180deg,#120d0a,#311b12_45%,#fff7ea_100%)] px-4 py-10">
         <section className="mx-auto max-w-3xl rounded-[40px] border border-white/10 bg-white/94 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.18)] md:p-10">
           <p className="section-eyebrow">Admin panel</p>
-          <h1 className="mt-4 text-4xl font-semibold">Staff dashboard access</h1>
+          <h1 className="mt-4 text-4xl font-semibold">Staff dashboard</h1>
           <p className="mt-5 text-base leading-8 text-[color:var(--theme-muted)]">
             This admin panel is hidden from the public navigation. Use the default admin account or sign in with an approved manager account.
           </p>
